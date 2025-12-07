@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Social Platform{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="/" class="brand">SocialApp</a>
+            <div class="nav-links" id="nav-links">
+                <!-- JS will populate this based on auth status -->
+                <a href="/login" id="nav-login">Login</a>
+                <a href="/register" id="nav-register">Register</a>
+            </div>
+        </div>
+    </nav>
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+    <script src="/static/js/api.js?v=3"></script>
+    <script>
+        // Simple auth check for navbar
+        document.addEventListener("DOMContentLoaded", () => {
+            const token = localStorage.getItem("access_token");
+            const nav = document.getElementById("nav-links");
+            if (token) {
+                nav.innerHTML = `
+                    <a href="/">Feed</a>
+                    <a href="/create">Create Post</a>
+                    <a href="/profile">Profile</a>
+                    <a href="#" id="logout-btn">Logout</a>
+                `;
+                document.getElementById("logout-btn").addEventListener("click", (e) => {
+                    e.preventDefault();
+                    localStorage.removeItem("access_token");
+                    window.location.href = "/login";
+                });
+            }
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

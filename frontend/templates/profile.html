@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; margin-top: 2rem;">
+    <h1>User Profile</h1>
+
+    <div class="card" style="margin-top: 1rem; text-align: center;">
+        <img id="profile-pic-preview" src="/static/default_pfp.png"
+            style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; background: #eee; margin-bottom: 1rem;">
+
+        <form id="profile-form" style="text-align: left;">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Choose a username">
+            </div>
+
+            <div class="form-group">
+                <label for="profile_picture">Profile Picture</label>
+                <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
+            </div>
+
+            <button type="submit">Update Profile</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Inline script for profile specific logic, or move to auth.js
+    document.addEventListener("DOMContentLoaded", async () => {
+        // Fetch current user details? We don't have a /users/me GET endpoint yet that returns detailed info including PFP
+        // We might need to add one or just rely on what we can get. 
+        // Ideally we should have GET /auth/me for this. 
+        // For now let's implement the Update logic.
+
+        // Wait, we need to show CURRENT info.
+        // Let's assume we implement GET /auth/me in backend or we won't show current info correctly initially.
+        // Actually, we can just implement the update form for now.
+    });
+</script>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/auth.js?v=3"></script>
+<script>
+    // Simple profile logic
+    const form = document.getElementById("profile-form");
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        // Remove empty fields
+        if (!formData.get("profile_picture").size) formData.delete("profile_picture");
+
+        try {
+            const token = localStorage.getItem("access_token");
+            const response = await fetch("/api/auth/me", {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            if (response.ok) {
+                const user = await response.json();
+                alert("Profile updated!");
+                document.getElementById("username").value = user.username || "";
+                if (user.profile_picture_url) {
+                    document.getElementById("profile-pic-preview").src = user.profile_picture_url;
+                }
+            } else {
+                const err = await response.json();
+                alert(err.detail || "Update failed");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Error updating profile");
+        }
+    });
+</script>
+{% endblock %}
