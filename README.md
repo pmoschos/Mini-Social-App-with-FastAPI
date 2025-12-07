@@ -1,5 +1,7 @@
 # Social Media Platform Documentation
 
+![Total Views](https://views.whatilearened.today/views/github/pmoschos/Mini-Social-App-with-FastAPI.svg)![Python](https://img.shields.io/badge/language-Python-blue.svg) ![GitHub last commit](https://img.shields.io/github/last-commit/pmoschos/Mini-Social-App-with-FastAPI) ![License](https://img.shields.io/badge/license-MIT-green.svg)
+
 Welcome to the comprehensive documentation for the Social Media Platform. This project is a production-grade, full-stack application built using **FastAPI** for the high-performance backend and **Vanilla JavaScript** for a lightweight, dependency-free frontend.
 
 This document serves as a complete reference for developers, DevOps engineers, and contributors. It covers every aspect of the system, from the database schema and API specifications to the frontend architecture and deployment instructions.
